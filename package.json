@@ -1,6 +1,6 @@
 {
 	"name": "@frontline-hq/sveltekit-i18n",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "A repository to easily handle content and localization in SvelteKit",
 	"repository": "git@github.com:frontline-hq/sveltekit-i18n",
 	"author": "Benjamin Preiss benjaminpreiss@protonmail.com",
