@@ -143,10 +143,10 @@
   dependencies:
     estraverse "^5.3.0"
 
-"@frontline-hq/rollup-merge-import@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@frontline-hq/rollup-merge-import/-/rollup-merge-import-0.0.4.tgz#3663022bea001fcf0f33bb6cdd7160ef3e2f8995"
-  integrity sha512-tpJOkwjlPk3tPe/CP9lfxFjQ85h7IZYK+E7vbnZ5J8saXv3Q+FIh/WumlG7/uZ8ZkIAhp2UTCUAiW31hq5CgGw==
+"@frontline-hq/rollup-merge-import@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@frontline-hq/rollup-merge-import/-/rollup-merge-import-0.0.6.tgz#9c60c99ceda903c478b606e88344283502d48087"
+  integrity sha512-ga4Y9HwMUVadNCQCt0gdn+CVY6aanh/IKbA6+fCTWvDkVzT4ABN33zPHuoxRr2stMRFJ06eCdMcIb9CmEe74cA==
   dependencies:
     node "^19.6.0"
     tiny-glob "^0.2.9"
