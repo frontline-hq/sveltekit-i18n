@@ -56,10 +56,32 @@ export async function init({
 	return contents;
 }
 
-export function getContent(id: string) {
+export function getContent(id: string, pathDel = '_', defaultLang = 'en') {
 	const layout = id.includes('_layout.') || id.startsWith('layout.');
 	let content;
-	const unsub = page.subscribe((v) => (content = v.data.contents));
+	let lang = '';
+	let route = '';
+	const unsub = page.subscribe((v) => {
+		lang = v.params.lang || defaultLang;
+		route = v.route.id || '';
+		content = v.data.contents;
+	});
 	unsub();
-	return get(content, layout ? id : 'page.' + id);
+	const result = get(content, layout ? id : 'page.' + id);
+	if (!result) {
+		if (layout) {
+			const filePath = `.../contents/${lang}/${id.split('.')[0].replace(pathDel, '/')}`;
+			const key = id.split('.').slice(1).join('.');
+			console.error(
+				`couldn't getContent for '${id}'.\n\nDoes the path '${filePath}' point to an existing file?\n\nDoes the key '${key}' exist in the file '${filePath}'?`
+			);
+		} else {
+			const filePath = `.../contents${route.replace('[[lang=lang]]', lang)}/page`;
+			const key = id;
+			console.error(
+				`couldn't getContent for '${id}'.\n\nDoes the path '${filePath}' point to an existing file?\n\nDoes the key '${key}' exist in the file '${filePath}'?`
+			);
+		}
+	}
+	return result;
 }
