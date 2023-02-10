@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Content, { getContent } from '$lib/I18n.svelte';
+	import Content, { getContent } from '$lib/index';
 	console.log(getContent('folder_layout.key'));
 </script>
 

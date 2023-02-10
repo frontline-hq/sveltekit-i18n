@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { init } from '$lib/I18n.svelte';
+import { init } from '$lib/index';
 export const prerender = true;
 
 export const load = (async ({ params: { lang }, url: { pathname } }) => {
