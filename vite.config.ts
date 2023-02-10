@@ -13,20 +13,6 @@ function getComment(comment: string) {
 }
 
 const config: UserConfig = {
-	build: {
-		rollupOptions: {
-			// make sure to externalize deps that shouldn't be bundled
-			// into your library
-			external: ['virtual:merge/contents/**/*.mdx'],
-			output: {
-				// Provide global variables to use in the UMD build
-				// for externalized deps
-				globals: {
-					'virtual:merge/contents/**/*.mdx': 'virtual:merge/contents/**/*.mdx'
-				}
-			}
-		}
-	},
 	plugins: [
 		sveltekit(),
 		mdx({
