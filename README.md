@@ -87,7 +87,7 @@ export async function init({
 	lang, // Current page lang, pass from load() params
 	pathname, // Current page pathname, pass from load() params
 	pathDel = '_', // Delimiter with which fs paths are split upon merge-import
-	defaultLang = 'en', // Fallback lang if pathname doesnt contain lang
+	defaultLang = 'en', // Fallback lang if pathname doesnt contain lang (falls back to "en" as you can see)
 	layout = true, // Should layout data also be populated?
 	page // Should page data be populated?
 }: {
@@ -157,7 +157,7 @@ import type { PageLoad } from './$types';
 import { init } from '@frontline-hq/sveltekit-i18n';
 
 export const load = (async ({ params: { lang }, url: { pathname } }) => {
-	const contents = await init({ lang, pathname });
+	const contents = await init({ lang, pathname, defaultLang = 'en' });
 	return { contents };
 }) satisfies PageLoad;
 ```
@@ -184,7 +184,7 @@ import type { PageLoad } from './$types';
 import { init } from '@frontline-hq/sveltekit-i18n';
 
 export const load = (async ({ params: { lang }, url: { pathname } }) => {
-	const contents = await init({ lang, pathname });
+	const contents = await init({ lang, pathname, defaultLang = 'en' });
 	return { contents };
 }) satisfies PageLoad;
 ```
@@ -216,7 +216,7 @@ import type { LayoutLoad } from './$types';
 import { init } from '@frontline-hq/sveltekit-i18n';
 
 export const load = (async ({ params: { lang }, url: { pathname } }) => {
-	const contents = await init({ lang, pathname });
+	const contents = await init({ lang, pathname, defaultLang = 'en' });
 	return { contents };
 }) satisfies LayoutLoad;
 ```

@@ -49,6 +49,9 @@ export async function init({
 		if (page || page === undefined) {
 			contents.page = pageContents;
 		}
+		contents.meta = {
+			defaultLang: defaultLang
+		};
 	} catch (error) {
 		console.error("Couldn't import content .mdx files, error:");
 		console.error(error);
@@ -56,13 +59,13 @@ export async function init({
 	return contents;
 }
 
-export function getContent(id: string, pathDel = '_', defaultLang = 'en') {
+export function getContent(id: string, pathDel = '_') {
 	const layout = id.includes('_layout.') || id.startsWith('layout.');
 	let content;
 	let lang = '';
 	let route = '';
 	const unsub = page.subscribe((v) => {
-		lang = v.params.lang || defaultLang;
+		lang = v.params.lang || v.data.contents.meta.defaultLang;
 		route = v.route.id || '';
 		content = v.data.contents;
 	});
