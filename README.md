@@ -38,6 +38,7 @@ import type { UserConfig } from 'vite';
 import mdx from '@mdx-js/rollup';
 import recmaSection from '@frontline-hq/recma-sections';
 import rollupMergeImport from '@frontline-hq/rollup-merge-import';
+import { rollupI18N } from '@frontline-hq/sveltekit-i18n';
 
 function getComment(comment: string) {
 	return comment
@@ -54,7 +55,8 @@ const config: UserConfig = {
 			jsxImportSource: 'preact',
 			recmaPlugins: [[recmaSection, { getComment: getComment }]]
 		}),
-		rollupMergeImport()
+		rollupMergeImport(),
+		rollupI18N()
 	],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
@@ -67,19 +69,28 @@ export default config;
 2 - Setup your locale matching in `src/params/lang.ts` to return only the correct locales. This will make sure that the locales within the url of your webapp have to match the array you specified. If a user wants to visit a page on a non-specified locale, this will return an error.
 
 ```ts
-import type { ParamMatcher } from '@sveltejs/kit';
+export { match } from '@frontline-hq/sveltekit-i18n';
+```
 
-export const match = ((param) => {
-	const locales = ['en', 'de'];
-	return locales.includes(param);
-}) satisfies ParamMatcher;
+3 - Wrap your app with the LangRouter svelte component on the root `+layout.svelte` component to enable automatic route correction based on the users preferences:
+
+/src/routes/+layout.svelte:
+
+```svelte
+<script lang="ts">
+	import { LangRouter } from '@frontline-hq/sveltekit-i18n';
+</script>
+
+<LangRouter>
+	<slot />
+</LangRouter>
 ```
 
 ## Usage
 
 This package populates the data returned from a layout's or page's `load()` function to contain the corresponding mdx files contents.
 
-It exposes three exports:
+It exposes ten exports:
 
 ```ts
 // init(), a function to populate your pages data with contents (callable in page / layout load() function)
@@ -87,14 +98,12 @@ export async function init({
 	lang, // Current page lang, pass from load() params
 	pathname, // Current page pathname, pass from load() params
 	pathDel = '_', // Delimiter with which fs paths are split upon merge-import
-	defaultLang = 'en', // Fallback lang if pathname doesnt contain lang (falls back to "en" as you can see)
 	layout = true, // Should layout data also be populated?
 	page // Should page data be populated?
 }: {
 	lang: string | undefined;
 	pathname: string;
 	pathDel?: string;
-	defaultLang?: string;
 	layout?: boolean;
 	page?: boolean;
 }): Record<string, unknown> {
@@ -118,6 +127,34 @@ export function getContent(id: string): unknown {
 export function getLang(): string {
 
 }
+
+/*	setLangPref(), sets the users lang preference in localstorage (and redirects afterwards).
+*/
+export function setLangPref(lang: string) {}
+
+/* redirect(), corrects the route based on the users preferences
+*/
+export function redirect() {}
+
+/* getLangPref(), returns the users language preference based on browser settings and localstorage (localstorage takes precedence)
+*/
+export function getLangPref(lang: string) {}
+
+/*	match(), the matcher function required by sveltekit in the /params/lang.ts file.
+*/
+export function match() {
+
+}
+
+/* rollupI18NPlugin(), the rollup plugin that amongst other things also reads the i18n config file and exposes it to this i18n library for usage.
+*/
+export function rollupI18N() {
+
+}
+
+/* Wrapper component to wrap your sveltekit app with that automatically corrects the route based on the users lang preferences.
+*/
+export class LangRouter //...
 
 // Default export. Same options, but returns a svelte component that directly renders the requested piece of information (utilizing preact)
 export default //...
@@ -164,7 +201,7 @@ import type { PageLoad } from './$types';
 import { init } from '@frontline-hq/sveltekit-i18n';
 
 export const load = (async ({ params: { lang }, url: { pathname } }) => {
-	const contents = await init({ lang, pathname, defaultLang = 'en' });
+	const contents = await init({ lang, pathname });
 	return { contents };
 }) satisfies PageLoad;
 ```
@@ -191,7 +228,7 @@ import type { PageLoad } from './$types';
 import { init } from '@frontline-hq/sveltekit-i18n';
 
 export const load = (async ({ params: { lang }, url: { pathname } }) => {
-	const contents = await init({ lang, pathname, defaultLang = 'en' });
+	const contents = await init({ lang, pathname });
 	return { contents };
 }) satisfies PageLoad;
 ```
@@ -223,7 +260,7 @@ import type { LayoutLoad } from './$types';
 import { init } from '@frontline-hq/sveltekit-i18n';
 
 export const load = (async ({ params: { lang }, url: { pathname } }) => {
-	const contents = await init({ lang, pathname, defaultLang = 'en' });
+	const contents = await init({ lang, pathname });
 	return { contents };
 }) satisfies LayoutLoad;
 ```

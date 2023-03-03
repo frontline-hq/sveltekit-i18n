@@ -2,24 +2,27 @@
 import { page } from '$app/stores';
 import lodash from 'lodash';
 export { default } from './I18n.svelte';
-
+export { default as LangRouter } from './Wrapper.svelte';
+export { default as rollupI18N } from './rollup';
+import config from 'virtual:i18n-config';
+import type { ParamMatcher } from '@sveltejs/kit';
+import { goto } from '$app/navigation';
 const { get } = lodash;
 
 export async function init({
 	lang,
 	pathname,
 	pathDel = '_',
-	defaultLang = 'en',
 	layout = true,
 	page
 }: {
 	lang: string | undefined;
 	pathname: string;
 	pathDel?: string;
-	defaultLang?: string;
 	layout?: boolean;
 	page?: boolean;
 }) {
+	console.log(config);
 	function stripEnd(s: string) {
 		return s.split('/').slice(0, -1).join('/');
 	}
@@ -28,7 +31,7 @@ export async function init({
 	}
 	const strippedLangPath = pathname.replace(`/${lang}`, '') + '/page';
 	const strippedPath = stripEnd(strippedLangPath);
-	const l = lang || defaultLang;
+	const l = lang || config.defaultLang;
 	const pageKey = (l + strippedLangPath).replace('//', '/').replaceAll('/', pathDel);
 	const contents: Record<string, unknown> = {};
 	try {
@@ -49,9 +52,6 @@ export async function init({
 		if (page || page === undefined) {
 			contents.page = pageContents;
 		}
-		contents.meta = {
-			defaultLang: defaultLang
-		};
 	} catch (error) {
 		console.error("Couldn't import content .mdx files, error:");
 		console.error(error);
@@ -62,7 +62,7 @@ export async function init({
 export function getLang() {
 	let lang = '';
 	const unsub = page.subscribe((v) => {
-		lang = v.params.lang || v.data.contents.meta.defaultLang;
+		lang = v.params.lang || config.defaultLang;
 	});
 	unsub();
 	return lang;
@@ -74,7 +74,7 @@ export function getContent(id: string, pathDel = '_') {
 	let lang = '';
 	let route = '';
 	const unsub = page.subscribe((v) => {
-		lang = v.params.lang || v.data.contents.meta.defaultLang;
+		lang = v.params.lang || config.defaultLang;
 		route = v.route.id || '';
 		content = v.data.contents;
 	});
@@ -97,3 +97,40 @@ export function getContent(id: string, pathDel = '_') {
 	}
 	return result;
 }
+
+export function getLangPref() {
+	if (window) {
+		const lS = window.localStorage.getItem('i18n-lang-preference');
+		const b = window.navigator.language;
+		return lS ?? b;
+	} else throw new Error('window is not defined.');
+}
+
+export function redirect() {
+	let lang = '';
+	const unsub = page.subscribe((v) => {
+		lang = v.params.lang || config.defaultLang;
+	});
+	unsub();
+	if (window) {
+		const langPref = getLangPref();
+		const nextBestLang =
+			config.langs.find((l) => langPref.includes(l) || l.includes(langPref)) ?? config.defaultLang;
+		const newPathname = window.location.pathname.replace(/\/(.)*?\//, `/${nextBestLang}/`);
+		const newUrl = newPathname + window.location.search + window.location.hash;
+		if (lang !== nextBestLang) {
+			goto(newUrl);
+		}
+	}
+}
+
+export function setLangPref(lang: string) {
+	if (window) {
+		window.localStorage.setItem('i18n-lang-preference', lang);
+	} else throw new Error('window is not defined.');
+}
+
+export const match = ((param) => {
+	const locales = config.langs;
+	return locales.includes(param);
+}) satisfies ParamMatcher;
