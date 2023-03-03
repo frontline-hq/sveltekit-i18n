@@ -59,6 +59,15 @@ export async function init({
 	return contents;
 }
 
+export function getLang() {
+	let lang = '';
+	const unsub = page.subscribe((v) => {
+		lang = v.params.lang || v.data.contents.meta.defaultLang;
+	});
+	unsub();
+	return lang;
+}
+
 export function getContent(id: string, pathDel = '_') {
 	const layout = id.includes('_layout.') || id.startsWith('layout.');
 	let content;

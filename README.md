@@ -110,6 +110,13 @@ export async function init({
 */
 export function getContent(id: string): unknown {
 	//...
+
+/*  getLang(), a function to return the currently active lang.
+
+	Falls back to default lang, if route does not contain a lang.
+*/
+export function getLang(): string {
+
 }
 
 // Default export. Same options, but returns a svelte component that directly renders the requested piece of information (utilizing preact)
