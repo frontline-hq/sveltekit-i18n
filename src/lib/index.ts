@@ -6,7 +6,6 @@ export { default as LangRouter } from './Wrapper.svelte';
 export { default as rollupI18N } from './rollup';
 import config from 'virtual:i18n-config';
 import type { ParamMatcher } from '@sveltejs/kit';
-import { goto } from '$app/navigation';
 const { get } = lodash;
 
 export async function init({
@@ -106,13 +105,14 @@ export function getLangPref() {
 	} else throw new Error('window is not defined.');
 }
 
-export function redirect() {
+export async function redirect() {
 	let lang = '';
 	const unsub = page.subscribe((v) => {
 		lang = v.params.lang || config.defaultLang;
 	});
 	unsub();
 	if (window) {
+		const { goto } = await import('$app/navigation');
 		const langPref = getLangPref();
 		const nextBestLang =
 			config.langs.find((l) => langPref.includes(l) || l.includes(langPref)) ?? config.defaultLang;
