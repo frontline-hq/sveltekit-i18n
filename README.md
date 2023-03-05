@@ -90,7 +90,7 @@ export { match } from '@frontline-hq/sveltekit-i18n';
 
 This package populates the data returned from a layout's or page's `load()` function to contain the corresponding mdx files contents.
 
-It exposes ten exports:
+It exposes seven exports and one svelte store with three properties:
 
 ```ts
 // init(), a function to populate your pages data with contents (callable in page / layout load() function)
@@ -110,31 +110,29 @@ export async function init({
 	//...
 }
 
-/*  getContent(), a function to retrieve populated paths for content
-    Takes an id as param.
-    - For page data this param should be the lodash path for accessing the mdx files named export directly
-    - For layout data, this param still has to include the path (with "_" delimiters) with "_layout" at the end, since there can be multiple layout files applicable to one page / layout
-
-    returns the requested piece of data.
+/** i18n, a svelte store that has the following properties:
+ *
+ * get(), a function to retrieve populated paths for content
+ * Takes an id as param.
+ * - For page data this param should be the lodash path for accessing the mdx files named export directly
+ * - For layout data, this param still has to include the path (with "_" delimiters) with "_layout" at the end, since there can be multiple layout files applicable to one page / layout
+ *
+ * returns the requested piece of data.
+ *
+ * lang, a variable that contains the currently active lang.
+ * Falls back to default lang, if route does not contain a lang.
+ *
+ * redirect(), corrects the route based on the users preferences
 */
-export function getContent(id: string): unknown {
-	//...
-
-/*  getLang(), a function to return the currently active lang.
-
-	Falls back to default lang, if route does not contain a lang.
-*/
-export function getLang(): string {
-
-}
+const i18n: Readable<{
+    get: (id: string, pathDel?: string) => any;
+    lang: string;
+    redirect: () => Promise<void>;
+}>
 
 /*	setLangPref(), sets the users lang preference in localstorage (and redirects afterwards).
 */
 export function setLangPref(lang: string) {}
-
-/* redirect(), corrects the route based on the users preferences
-*/
-export function redirect() {}
 
 /* getLangPref(), returns the users language preference based on browser settings and localstorage (localstorage takes precedence)
 */
@@ -211,8 +209,8 @@ export const load = (async ({ params: { lang }, url: { pathname } }) => {
 ```svelte
 <script lang=ts>
     // code of .../folder1/+page.svelte
-    import Content, { getContent } from '@frontline-hq/sveltekit-i18n';
-    console.log(getContent("key"))
+    import Content, { i18n } from '@frontline-hq/sveltekit-i18n';
+    console.log($i18n.get("key"))
 </script>
 
 <Content id="default">

@@ -132,10 +132,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.35.0.tgz#b7569632b0b788a0ca0e438235154e45d42813a7"
   integrity sha512-JXdzbRiWclLVoD8sNUjR443VVlYqiYmDVT6rGUEIEHU5YJW0gaVZwV2xgM7D4arkvASqD0IlLUVjHiFuxaftRw==
 
-"@frontline-hq/react-in-svelte@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@frontline-hq/react-in-svelte/-/react-in-svelte-0.0.9.tgz#27d44804c51e5bff1e653198353ea2b8d0f2e5e3"
-  integrity sha512-4AEDwCDvh6gSMc5HLopOtg5UEge2KzhUISba7Xf9MfElmuDiJsBKliSS6L/v8ALesqSOgWpcQ+Hbj0NMnS4mYw==
+"@frontline-hq/react-in-svelte@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@frontline-hq/react-in-svelte/-/react-in-svelte-0.0.11.tgz#3097dd351662eb63a120dd610207af1082969193"
+  integrity sha512-m5m77GmWm4SE/BSDUUfNvGBEogQPtmmdPZqgJ+EAtgwcOCjgBoLhhhZW+hudbtRYUShdNmrEME/lOIumqpyTiQ==
   dependencies:
     preact "^10.11.3"
     preact-render-to-string "^5.2.6"

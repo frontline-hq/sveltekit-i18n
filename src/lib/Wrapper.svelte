@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { redirect } from './index';
+	import { i18n } from './index';
 
 	onMount(() => {
-		redirect();
+		$i18n.redirect();
 	});
 </script>
 

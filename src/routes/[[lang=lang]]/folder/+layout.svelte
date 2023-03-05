@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Content, { getContent } from '$lib/index';
-	console.log(getContent('folder_layout.key'));
+	import Content, { i18n } from '$lib/index';
+	console.log($i18n.get('folder_layout.key'));
 </script>
 
 <div>

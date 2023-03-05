@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Content, { getContent, getLang, LangRouter } from '$lib/index';
+	import Content, { i18n, LangRouter } from '$lib/index';
 
-	console.log('lang', getLang());
-	console.log(getContent('layout.key'));
+	$: console.log('lang', $i18n.lang);
+	$: console.log($i18n.get('layout.key'));
 </script>
 
 <LangRouter>

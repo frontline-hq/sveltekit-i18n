@@ -1,15 +1,15 @@
 <script lang="ts">
 	import ReactWrapper from '@frontline-hq/react-in-svelte';
-	import htm from 'htm';
+	import htm from 'htm/mini';
 	import { h, type VNode } from 'preact';
-	import { getContent } from './index';
+	import { i18n } from './index';
 	export let id: string;
 
 	const html = htm.bind(h);
 
-	function vN(id: string) {
-		return html`<${getContent(id)} />` as VNode;
-	}
+	const vNode = (content: any) => {
+		return html`<${content} />` as VNode;
+	};
 </script>
 
-<ReactWrapper vNode={vN(id)} />
+<ReactWrapper vNode={vNode($i18n.get(id))} />
