@@ -1,5 +1,5 @@
 // Reexport your entry components here
-import { page } from '$app/stores';
+import { page } from 'virtual:app-store';
 import lodash from 'lodash';
 export { default } from './I18n.svelte';
 export { default as LangRouter } from './Wrapper.svelte';

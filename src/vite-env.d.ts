@@ -5,3 +5,8 @@ declare module 'virtual:i18n-config' {
 	const config: { langs: string[]; defaultLang: string };
 	export default config;
 }
+
+declare module 'virtual:app-store' {
+	// eslint-disable-next-line
+	export * from '$app/stores';
+}
