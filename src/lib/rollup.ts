@@ -19,7 +19,7 @@ export default function rollupI18NPlugin(): Plugin {
 				const file = fs.readFileSync(process.cwd() + '/sveltekit-i18n.config.js', 'utf-8');
 				return file;
 			} else if (id.startsWith(resolvedVirtualModuleIdStore)) {
-				return `export * from "/node_modules/@sveltejs/kit/src/runtime/app/stores.js"`;
+				return `export * from "${process.cwd()}/node_modules/@sveltejs/kit/src/runtime/app/stores.js"`;
 			}
 			return null;
 		}
