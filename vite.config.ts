@@ -18,13 +18,13 @@ const config: UserConfig = {
 		rollupOptions: {
 			// make sure to externalize deps that shouldn't be bundled
 			// into your library
-			external: ['virtual:i18n-config', 'virtual:app-store'],
+			external: ['virtual:i18n-config', 'virtual:i18n'],
 			output: {
 				// Provide global variables to use in the UMD build
 				// for externalized deps
 				globals: {
 					'virtual:i18n-config': 'virtual:i18n-config',
-					'virtual:app-store': 'virtual:app-store'
+					'virtual:i18n': 'virtual:i18n'
 				}
 			}
 		}
