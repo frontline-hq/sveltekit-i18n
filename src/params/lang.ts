@@ -1,1 +1,1 @@
-export { match } from '../lib/index';
+export { match } from 'virtual:i18n';

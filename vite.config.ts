@@ -3,7 +3,7 @@ import type { UserConfig } from 'vite';
 import mdx from '@mdx-js/rollup';
 import recmaSection from '@frontline-hq/recma-sections';
 import rollupMergeImport from '@frontline-hq/rollup-merge-import';
-import rollupI18N from './src/lib/rollup';
+import rollupI18n from './src/lib/rollup';
 
 function getComment(comment: string) {
 	return comment
@@ -30,14 +30,15 @@ const config: UserConfig = {
 		}
 	},
 	plugins: [
+		rollupI18n(),
 		sveltekit(),
 		mdx({
 			jsxImportSource: 'preact',
 			recmaPlugins: [[recmaSection, { getComment: getComment }]]
 		}),
-		rollupMergeImport(),
-		rollupI18N()
+		rollupMergeImport()
 	],
+	optimizeDeps: {},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}

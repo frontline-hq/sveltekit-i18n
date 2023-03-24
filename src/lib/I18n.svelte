@@ -2,7 +2,7 @@
 	import ReactWrapper from '@frontline-hq/react-in-svelte';
 	import htm from 'htm/mini';
 	import { h, type VNode } from 'preact';
-	import { i18n } from './index';
+	import i18n from 'virtual:i18n';
 	export let id: string;
 
 	const html = htm.bind(h);

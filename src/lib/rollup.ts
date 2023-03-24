@@ -3,27 +3,54 @@ import fs from 'fs';
 import path from 'path';
 
 export default function rollupI18NPlugin(): Plugin {
-	const virtualModuleIdConfig = `virtual:i18n-config`;
-	const virtualModuleIdStore = `virtual:i18n`;
-	const resolvedVirtualModuleIdConfig = '\0' + virtualModuleIdConfig;
-	const resolvedVirtualModuleIdStore = '\0' + virtualModuleIdStore;
+	const idConfig = `virtual:i18n-config`;
+	const idStore = `virtual:i18n`;
+	const resolvedIdConfig = '\0' + idConfig;
+	const resolvedIdStore = '\0' + idStore;
+	const idComponent = `virtual:i18n-component`;
+	const resolvedIdComponent = '\0' + idComponent;
 	return {
 		name: 'rollup-i18n-plugin', // required, will show up in warnings and errors
-		resolveId(id, importer) {
-			if (id === virtualModuleIdConfig) {
-				return '\0' + id;
-			} else if (id === virtualModuleIdStore && importer) {
-				return '\0' + id + '?' + path.dirname(importer ?? '');
+		resolveId(id) {
+			if (id === idConfig) {
+				return resolvedIdConfig;
+			} else if (id === idStore) {
+				return resolvedIdStore;
+			} else if (id === idComponent) {
+				return resolvedIdComponent;
 			}
 			return null;
 		},
+		async transform(code, id) {
+			if (id.endsWith('I18n.svelte') || id.endsWith('LangRouter.svelte')) {
+				const config = fs.readFileSync(process.cwd() + '/sveltekit-i18n.config.js', 'utf-8');
+				const newCode = code.replace(
+					`import i18n from "virtual:i18n";`,
+					`
+${config.replace('export default config;', '')}
+import {i18nTemplate} from '@frontline-hq/sveltekit-i18n/i18n';
+import {page} from '$app/stores';
+const i18n = i18nTemplate(config, page);
+				`
+				);
+				return newCode;
+			}
+		},
 		async load(id) {
-			if (id === resolvedVirtualModuleIdConfig) {
+			if (id === resolvedIdConfig) {
 				const file = fs.readFileSync(process.cwd() + '/sveltekit-i18n.config.js', 'utf-8');
 				return file;
-			} else if (id.startsWith(resolvedVirtualModuleIdStore + '?')) {
-				const importerDir = id.split('?')[1];
-				const file = fs.readFileSync(importerDir + '/i18n.js', 'utf-8');
+			} else if (id === resolvedIdStore) {
+				const config = fs.readFileSync(process.cwd() + '/sveltekit-i18n.config.js', 'utf-8');
+				const file = `
+${config.replace('export default config;', '')}
+import {i18nTemplate, initTemplate, matchTemplate} from '@frontline-hq/sveltekit-i18n/i18n';
+import {page} from "$app/stores";
+const i18n = i18nTemplate(config, page);
+export default i18n;
+export const init = initTemplate(config);
+export const match = matchTemplate(config);
+				`;
 				return file;
 			}
 			return null;

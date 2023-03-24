@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Content, { i18n } from '$lib/index';
-
+	import i18n from 'virtual:i18n';
+	import Content from '$lib/I18n.svelte';
 	console.log('index', $i18n.get('key'));
 </script>
 

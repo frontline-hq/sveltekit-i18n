@@ -2,6 +2,15 @@
 
 A library to easily handle content and localization in SvelteKit.
 
+## Development
+
+1. Clone the git repo
+2. `yarn` or `npm install`
+3. Make shell scripts executable: `chmod u+x *.sh`
+4. (Optional) Build the package and copy bundle to node_modules for testing purposes: `./build-and-move.sh`
+
+With the last step you will be able to test the package in a real live scenario.
+
 ## Installation
 
 ```bash
