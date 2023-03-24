@@ -1,6 +1,5 @@
 import type { Plugin } from 'rollup';
 import fs from 'fs';
-import path from 'path';
 
 export default function rollupI18NPlugin(): Plugin {
 	const idConfig = `virtual:i18n-config`;
@@ -20,21 +19,6 @@ export default function rollupI18NPlugin(): Plugin {
 				return resolvedIdComponent;
 			}
 			return null;
-		},
-		async transform(code, id) {
-			if (id.endsWith('I18n.svelte') || id.endsWith('LangRouter.svelte')) {
-				const config = fs.readFileSync(process.cwd() + '/sveltekit-i18n.config.js', 'utf-8');
-				const newCode = code.replace(
-					`import i18n from "virtual:i18n";`,
-					`
-${config.replace('export default config;', '')}
-import {i18nTemplate} from '@frontline-hq/sveltekit-i18n/i18n';
-import {page} from '$app/stores';
-const i18n = i18nTemplate(config, page);
-				`
-				);
-				return newCode;
-			}
 		},
 		async load(id) {
 			if (id === resolvedIdConfig) {

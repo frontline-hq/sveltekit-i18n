@@ -1,13 +1,13 @@
 <script lang="ts">
 	import i18n from 'virtual:i18n';
-	import Content from '$lib/I18n.svelte';
-	import LangRouter from '$lib/LangRouter.svelte';
+	import Content from '@frontline-hq/sveltekit-i18n/I18n.svelte';
+	import LangRouter from '@frontline-hq/sveltekit-i18n/LangRouter.svelte';
 
 	$: console.log('lang', $i18n.lang);
 	$: console.log($i18n.get('layout.key'));
 </script>
 
-<LangRouter>
-	<Content id="layout.default" />
+<LangRouter {i18n}>
+	<Content id="layout.default" {i18n} />
 	<slot />
 </LangRouter>
