@@ -1067,17 +1067,17 @@ export function i18nTemplate(
 
 export function initTemplate(config: config) {
 	async function init({
-		lang,
 		pathname,
 		pathDel = '_',
 		layout = true,
-		page
+		page,
+		params
 	}: {
-		lang: string | undefined;
 		pathname: string;
 		pathDel?: string;
 		layout?: boolean;
 		page?: boolean;
+		params: Record<string, string>;
 	}) {
 		function stripEnd(s: string) {
 			return s.split('/').slice(0, -1).join('/');
@@ -1085,10 +1085,15 @@ export function initTemplate(config: config) {
 		function stripBegin(s: string, del: string) {
 			return s.split(del).slice(1).join(del);
 		}
+		const lang = params.lang;
 		const strippedLangPath = pathname.replace(`/${lang}`, '') + '/page';
 		const strippedPath = stripEnd(strippedLangPath);
 		const l = lang || config.defaultLang;
-		const pageKey = (l + strippedLangPath).replace('//', '/').replaceAll('/', pathDel);
+		let pageKey = (l + strippedLangPath).replace('//', '/');
+		for (const [key, value] of Object.entries(params)) {
+			if (key !== 'lang') pageKey = pageKey.replace(value, '$' + key + '$');
+		}
+		pageKey = pageKey.replaceAll('/', pathDel);
 		const contents: Record<string, unknown> = {};
 		try {
 			const allContents: Record<string, unknown> = await import('virtual:merge/contents/**/*.mdx');

@@ -3,7 +3,6 @@
 	import Content from '@frontline-hq/sveltekit-i18n/I18n.svelte';
 	import LangRouter from '@frontline-hq/sveltekit-i18n/LangRouter.svelte';
 
-	$: console.log('lang', $i18n.lang);
 	$: console.log($i18n.get('layout.key'));
 </script>
 
