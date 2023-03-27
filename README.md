@@ -2,6 +2,8 @@
 
 A library to easily handle content and localization in SvelteKit.
 
+The detection of locales in the url is based on the list provided by unicode in their github repo: https://github.com/unicode-org/cldr-json/blob/main/cldr-json/cldr-core/availableLocales.json
+
 ## Development
 
 1. Clone the git repo
