@@ -1060,6 +1060,9 @@ export function i18nTemplate(
 						goto(newUrl);
 					}
 				}
+			},
+			getLocalizedUrl: function (url: string) {
+				return lang === config.defaultLang ? url : `/${lang}${url}`;
 			}
 		};
 	});
@@ -1117,6 +1120,7 @@ export function initTemplate(config: config) {
 			console.error("Couldn't import content .mdx files, error:");
 			console.error(error);
 		}
+		console.log(contents);
 		return contents;
 	}
 	return init;
